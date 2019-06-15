@@ -30,7 +30,8 @@ module.exports = {
   async auth (req, res) {
     try {
       const { email, password } = req.body
-      const user = await validationAuth({ email, password })
+      let user = await validationAuth({ email, password })
+      delete user.password
       const token = await JWTSign(user)
       res.status(200).json({ token })
     } catch (e) {

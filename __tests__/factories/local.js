@@ -3,6 +3,6 @@ faker.locale = 'pt_BR'
 
 module.exports = () => {
   return {
-    nome: faker.name.firstName(),
+    nome: faker.company.companyName()
   }
 }
