@@ -1,3 +1,4 @@
+require('dotenv/config')
 const path = require('path')
 const { setAbsPath } = require('./utils')
 setAbsPath(path.join(__dirname, './'))
@@ -5,7 +6,6 @@ const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
 const cors = require('cors')
-
 const bodyParser = require('body-parser')
 
 mongoose.Promise = Promise

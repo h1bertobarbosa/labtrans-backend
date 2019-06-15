@@ -1,3 +1,7 @@
+require('dotenv').config({
+  path: '.env.testing'
+})
+
 const path = require('path')
 const { setAbsPath } = require('../../src/utils')
 setAbsPath(path.join(__dirname, '/../../src'))

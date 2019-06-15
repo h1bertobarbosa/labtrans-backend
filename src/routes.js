@@ -11,5 +11,6 @@ routes.post('/local/register', LocalController.store)
 routes.get('/local/list', LocalController.index)
 
 routes.post('/user/register', UserController.store)
+routes.post('/authenticate', UserController.auth)
 
 module.exports = routes
