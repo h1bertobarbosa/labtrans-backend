@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:3
+    hostname: mongo
+    container_name: mongo-dev
+    ports:
+      - 27017:27017
+    volumes:
+      - $PWD/.mongo:/data/db
+      - $PWD/.backups:/var/backups
+    networks:
+      intranet:
+        ipv4_address: 200.4.75.10
+
+networks:
+  intranet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 200.4.75.0/24
