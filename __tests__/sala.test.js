@@ -1,15 +1,17 @@
 const ServerMock = require('./mocks/server')
 const Sala = include('models/sala')
 const salaFake = require('./factories/sala')
-
+const authUser = require('./mocks/authUser')
+const User = include('models/user')
 const REQUEST_SUCCESS = 200
 const REQUEST_SUCCESS_CREATED = 201
 // const BAD_REQUEST = 400
 describe('User Tests', () => {
-  let request
+  let request, token
 
   beforeAll(async () => {
     request = await ServerMock()
+    token = await authUser()
     await Sala.deleteMany({})
   })
 
@@ -22,6 +24,7 @@ describe('User Tests', () => {
     await request
       .post('/sala/register')
       .send(fakeSala)
+      .set('Authorization', 'Bearer ' + token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(REQUEST_SUCCESS_CREATED)
@@ -39,6 +42,7 @@ describe('User Tests', () => {
     await Sala.create(fakeSala2)
     const res = await request
       .get('/sala/list')
+      .set('Authorization', 'Bearer ' + token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(REQUEST_SUCCESS)
@@ -48,5 +52,6 @@ describe('User Tests', () => {
 
   afterAll(async () => {
     await Sala.deleteMany({})
+    await User.deleteMany({})
   })
 })

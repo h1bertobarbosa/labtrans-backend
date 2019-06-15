@@ -1,15 +1,17 @@
 const ServerMock = require('./mocks/server')
 const Local = include('models/local')
+const User = include('models/user')
 const localFake = require('./factories/local')
-
+const authUser = require('./mocks/authUser')
 const REQUEST_SUCCESS = 200
 const REQUEST_SUCCESS_CREATED = 201
 // const BAD_REQUEST = 400
 describe('User Tests', () => {
-  let request
+  let request, token
 
   beforeAll(async () => {
     request = await ServerMock()
+    token = await authUser()
     await Local.deleteMany({})
   })
 
@@ -22,6 +24,7 @@ describe('User Tests', () => {
     await request
       .post('/local/register')
       .send(fakeLocal)
+      .set('Authorization', 'Bearer ' + token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(REQUEST_SUCCESS_CREATED)
@@ -39,6 +42,7 @@ describe('User Tests', () => {
     await Local.create(fakeLocal2)
     const res = await request
       .get('/local/list')
+      .set('Authorization', 'Bearer ' + token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(REQUEST_SUCCESS)
@@ -48,5 +52,6 @@ describe('User Tests', () => {
 
   afterAll(async () => {
     await Local.deleteMany({})
+    await User.deleteMany({})
   })
 })
