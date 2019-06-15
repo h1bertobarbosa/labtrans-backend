@@ -43,7 +43,7 @@ describe('User Tests', () => {
       .expect('Content-Type', /json/)
       .expect(REQUEST_SUCCESS)
 
-    expect(res.body.length).toBe(2)
+    expect(res.body).toHaveLength(2)
   })
 
   afterAll(async () => {

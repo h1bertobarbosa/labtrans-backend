@@ -9,7 +9,6 @@ services:
       - 27017:27017
     volumes:
       - $PWD/.mongo:/data/db
-      - $PWD/.backups:/var/backups
     networks:
       intranet:
         ipv4_address: 200.4.75.10
