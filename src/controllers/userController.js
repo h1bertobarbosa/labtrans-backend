@@ -22,7 +22,9 @@ const validationAuth = async ({ email, password }) => {
 
 module.exports = {
   async store (req, res) {
+    console.log('dasdasdsd')
     const { nome, email, password } = req.body
+    console.log(req.body)
     const user = await User.create({ nome, email, password })
     return res.status(201).json(user)
   },

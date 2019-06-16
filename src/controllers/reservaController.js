@@ -27,7 +27,7 @@ const validarChoqueHorario = async (data, id) => {
 
 module.exports = {
   async index (req, res) {
-    const reservas = await Reserva.find().sort('-dataInicio')
+    const reservas = await Reserva.find().populate('sala').populate('local').sort('-dataInicio')
     res.json(reservas)
   },
 

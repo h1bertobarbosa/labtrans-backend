@@ -12,10 +12,18 @@ const jwt = require('express-jwt')
 mongoose.Promise = Promise
 mongoose.connect('mongodb://0.0.0.0:27017/labtrans', { useNewUrlParser: true, useCreateIndex: true })
 
+app.use(jwt({ secret: process.env.JWT_SECRET }).unless({ path: ['/user/register', '/authenticate'] }))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(jwt({ secret: process.env.JWT_SECRET }).unless({ path: ['/user/register', '/authenticate'] }))
+const options = {
+  origin: true,
+  'Access-Control-Allow-Credentials': true,
+  'Access-Control-Allow-Origin': true,
+  'Access-Control-Allow-Headers': true,
+  'Access-Control-Expose-Headers': true
+}
+
+app.use(cors(options))
 app.use(include('routes'))
-app.use(cors())
 
 app.listen(3333)
