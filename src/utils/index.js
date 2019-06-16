@@ -1,3 +1,5 @@
+const { isAfter, isBefore, isEqual } = require('date-fns')
+
 const setAbsPath = (srcPath) => {
   global.include = (file) => {
     return require(`${srcPath}/${file}`)
@@ -23,7 +25,12 @@ const isEmptyValue = (data) => {
   return count === 0
 }
 
+const temChoque = (DataInicioReserva, DataFimReserva, DataInicio) => {
+  return (isEqual(DataInicio, DataInicioReserva) || isAfter(DataInicio, DataInicioReserva)) && isBefore(DataInicio, DataFimReserva)
+}
+
 module.exports = {
+  temChoque,
   setAbsPath,
   isEmptyValue
 }

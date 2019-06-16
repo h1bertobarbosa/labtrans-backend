@@ -144,6 +144,60 @@ describe('User Tests', () => {
       .expect(BAD_REQUEST, expectedError)
   })
 
+  test('should throw an error when there is a time clash in the same room and location - POST /reserva/register', async () => {
+    let fakeReserva = reservaFake()
+    fakeReserva.dataInicio = '2019-06-15 19:40'
+    fakeReserva.dataFim = '2019-06-15 20:00'
+    await Reserva.create(fakeReserva)
+
+    const expectedError = {
+      type: 'validation_error',
+      message: 'Erro de validação',
+      errors: [
+        {
+          message: 'Já existe uma sala reservada com esse horário',
+          service: 'reserva_validation'
+        }
+      ]
+    }
+
+    await request
+      .post(`/reserva/register`)
+      .send(fakeReserva)
+      .set('Authorization', 'Bearer ' + token)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(BAD_REQUEST, expectedError)
+  })
+
+  test('should throw an error when there is a time clash in the same room and location - PUT /reserva/register', async () => {
+    let fakeReserva = reservaFake()
+    const reservaCreated = await Reserva.create(fakeReserva)
+
+    fakeReserva.dataInicio = '2019-06-15 19:40'
+    fakeReserva.dataFim = '2019-06-15 20:00'
+    await Reserva.create(fakeReserva)
+
+    const expectedError = {
+      type: 'validation_error',
+      message: 'Erro de validação',
+      errors: [
+        {
+          message: 'Já existe uma sala reservada com esse horário',
+          service: 'reserva_validation'
+        }
+      ]
+    }
+
+    await request
+      .put(`/reserva/${reservaCreated._id}`)
+      .send(fakeReserva)
+      .set('Authorization', 'Bearer ' + token)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(BAD_REQUEST, expectedError)
+  })
+
   afterAll(async () => {
     await Reserva.deleteMany({})
     await User.deleteMany({})
